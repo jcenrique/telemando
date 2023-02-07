@@ -5,9 +5,11 @@ namespace App\Orchid\Screens\Telemando;
 use App\Models\Elemento;
 use App\Models\Equipo;
 use App\Models\Ubicacion;
+use App\Orchid\Layouts\Telemando\EquiposListener;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Label;
@@ -17,6 +19,7 @@ use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Http\Request;
 
 class ElementoEditScreen extends Screen
 {
@@ -25,16 +28,22 @@ class ElementoEditScreen extends Screen
      *
      * @return array
      */
-    public $ubicacion;
-    public $elementos;
-   
-    public function query(Ubicacion $ubicacion): iterable
+   // public $ubicacion;
+  //  public $elementos;
+
+   // public $equipo_id;
+
+    public function query(): iterable
     {
-      
+
         return [
-            'ubicacion' =>  Ubicacion::where('id', $ubicacion->id)->with(['elementos', 'equipos'])->first(),
-           'elementos' => $ubicacion->elementos,
-           
+            'ubicacion' =>  Ubicacion::where('id', 2)->with(['elementos', 'equipos'])->first(),
+          //  'elementos' => $ubicacion->elementos,
+           'ubicacion_id' => 2
+            
+            
+            //Arr::pluck($ubicacion->equipos->all(), ['id']),
+
         ];
     }
 
@@ -45,7 +54,7 @@ class ElementoEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return __('Editar elementos ubicación: ') . $this->ubicacion->ubicacion;
+        return 'prueba'; // __('Editar elementos ubicación: ') . $this->ubicacion->ubicacion;
     }
 
     /**
@@ -56,12 +65,20 @@ class ElementoEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('Añadir elemento'))
-            ->icon('plus')
-            ->method('añadirElemento')
+
             //->route('platform.elementos.edit',[$this->ubicacion])
-          //  ->canSee($this->ubicacion->exists),
-        
+            //  ->canSee($this->ubicacion->exists),
+
+            // ModalToggle::make(__('Añadir elemento'))
+            //     ->modal('crearUbicacionModal')
+            //     ->method('añadirElemento')
+
+            //     ->asyncParameters([
+            //         'ubicacion' => $this->ubicacion->id,
+            //         'elemento_id' => $this->ubicacion->equipos(),
+                  
+            //     ])
+            //     ->icon('plus'),
         ];
     }
 
@@ -77,31 +94,65 @@ class ElementoEditScreen extends Screen
 
         return [
 
-            Layout::columns([
-                Group::make([
-                    Select::make('equipos')
-                        ->title(__('Tipo equipo'))
-                        ->required()
-                        ->fromQuery(Equipo::whereIn('id', Arr::pluck($this->ubicacion->equipos->all(), ['id'])), 'equipo', 'id'),
+            
+                
+                    EquiposListener::class,
+                   
+             
 
-                    Input::make('elemento')
-                        ->required()
-                        ->title('Nombre elemento'),
-                ])
-            ]),
+                // Layout::table('elementos', [
+                //     TD::make('elemento')
+                // ])
 
+                //     ->title(__('Elementos disponibles')),
 
 
+           
+
+            // Layout::modal('crearUbicacionModal', [
+            //     Layout::rows([
+            //         Input::make('elemento')
+            //             ->required()
+            //             ->title('Nombre elemento'),
+            //     ])->async('asyncGetElemento')
+
+            // ])
 
 
-          
-        ]; 
-       
+
+
+        ];
     }
 
-    public function añadirElemento()        
+    public function añadirElemento(Request $request, Ubicacion $ubicacion)
     {
+        dd($request->all());
+        $elemento = new Elemento(
+            [
+                'elemento' => $request->get('elemento'),
+                'ubicacion_id' =>  $ubicacion->id,
+               // 'equipo_id' => 
+            ]);
+        $ubicacion->elementos()->save($elemento);
         Toast::info(__('Elemento añadido con éxito'));
-        return redirect()->route('platform.elementos.edit', $this->ubicacion->id);
+        return redirect()->route('platform.elementos.edit', $ubicacion->id);
+    }
+
+    // public function asyncGetElemento(Ubicacion $ubicacion): iterable
+    // {
+    //     return [
+    //         'ubicacion' => $ubicacion,
+    //     ];
+    // }
+
+    public function asyncGetEquipo( Equipo $equipo)
+    {
+
+       
+        return [
+            'equipo' => $equipo,
+            'equipo_id' => $equipo->id,
+           
+        ];
     }
 }
