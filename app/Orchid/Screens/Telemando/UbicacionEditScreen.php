@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Telemando;
 
+use App\Http\Requests\StoreUbicacionRequest;
 use App\Models\Equipo;
 use App\Models\Ubicacion;
 use App\Models\Zona;
@@ -12,7 +13,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
-use Orchid\Support\Facades\Alert;
+
 use Orchid\Support\Facades\Toast;
 
 class UbicacionEditScreen extends Screen
@@ -26,7 +27,7 @@ class UbicacionEditScreen extends Screen
     public $ubicacion;
     public function query(Ubicacion $ubicacion): iterable
     {
-       
+      
         return [
             'ubicacion' => $ubicacion
         ];
@@ -49,7 +50,7 @@ class UbicacionEditScreen extends Screen
      */
     public function commandBar(): iterable
     {
-
+      
         return [
             Button::make(__('Crear ubicación'))
             ->icon('pencil')
@@ -66,8 +67,8 @@ class UbicacionEditScreen extends Screen
             ->method('remove')
             ->canSee($this->ubicacion->exists),
         
-        Link::make(__('Añadir elementos'))
-            ->icon('plus')
+        Link::make(__('Cargar alarmas'))
+            ->icon('upload')
             ->route('platform.elementos.edit',[$this->ubicacion])
             ->canSee($this->ubicacion->exists),
         ];
@@ -86,6 +87,7 @@ class UbicacionEditScreen extends Screen
         
         return [
             Layout::rows([
+                Input::make('ubicacion.id')->hidden(),
                 Input::make('ubicacion.ubicacion')
                     ->title(__('Ubicación'))
                    ->required()
@@ -109,8 +111,9 @@ class UbicacionEditScreen extends Screen
         ];
     }
 
-    public function createOrUpdate(Ubicacion $ubicacion, Request $request)
+    public function createOrUpdate(Ubicacion $ubicacion, StoreUbicacionRequest $request)
     {
+     
        // dd($request->get('ubicacion')['equipos']);
         $ubicacion->fill($request->get('ubicacion'))->save();
         $this->ubicacion = $ubicacion;

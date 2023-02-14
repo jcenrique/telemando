@@ -92,8 +92,8 @@
     "You may have' entered an address that doesn't exist or that the link you have requested doesn't work (anymore).": "Es posible que hayas ingresado una dirección incorrecta o el enlace no funciona.",
     "The details you entered did not match our records. Please double-check and try again.": "Los detalles que ingresaste no coincidieron con nuestros archivos. Por favor, revísalos e intenta de nuevo.",
     "Dashboard": "Tablero",
-    "There are no records in this view.": "No hay archivos en esta vista.",
-    "Displayed records: :from-:to of :total": "Archivos mostrados: :from-:to de :total",
+    "There are no records in this view.": "No hay registros en esta vista.",
+    "Displayed records: :from-:to of :total": "Registros mostrados: :from-:to de :total",
     "Welcome": "Bienvenido",
     "Scroll to top": "Ir arriba",
     "Upload image from your computer:": "Cargar imagen desde la computadora:",
@@ -158,7 +158,9 @@
     "The :resource was created!" :"El/la :resource se ha creado con éxito",
     "The :resource was deleted!" : "El/la :resource se ha eliminado con éxito",
     "The :resource was restored!": "El/la :resource se ha restaurado con éxito",
-    "Update" :"Actualizar"
-    
+    "Update" :"Actualizar",
+    "The application code is published under the MIT license." : "El código de la aplicación se publica bajo la licencia MIT.",
+    "Showing" :"Mostrando",
+    "of" :"de"
     
 }

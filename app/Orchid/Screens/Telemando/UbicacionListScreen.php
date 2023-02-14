@@ -25,7 +25,7 @@ class UbicacionListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'ubicaciones' => Ubicacion::with(['equipos','elementos'])->filters([ZonaQueryFilter::class])->defaultSort('ubicacion')->paginate(),
+            'ubicaciones' => Ubicacion::with(['equipos','elementos','elementos.alarmas'])->filters([ZonaQueryFilter::class])->defaultSort('ubicacion')->paginate(),
         ];
     }
 
@@ -54,7 +54,7 @@ class UbicacionListScreen extends Screen
         return [
             Link::make(__('Crear nueva'))
             ->icon('pencil')
-            ->route('platform.ubicacion.edit')
+            ->route('platform.ubicacion.nuevo.create')
 
         ];
     }

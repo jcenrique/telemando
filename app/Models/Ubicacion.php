@@ -17,7 +17,8 @@ class Ubicacion extends Model
     protected $fillable = [
         'ubicacion',
         'comentario',
-        'zona_id'
+        'zona_id',
+        'id'
         
     ];
     protected $allowedSorts = [

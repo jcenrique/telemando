@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Telemando;
 
+use App\Models\Alarma;
 use App\Models\Ubicacion;
 use App\Models\Zona;
 use Orchid\Screen\Actions\Button;
@@ -49,8 +50,9 @@ class UbicacionTableLayout extends Table
 
 
                 ->render(function ($model) {
-
-                    return  $model->equipos->implode('equipo', ' <BR>');
+                   
+                       
+                    return  $model->equipos->implode('equipo', ' <BR>') ;
                 }),
 
             TD::make('comentario'),

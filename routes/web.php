@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AlarmaController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('inicio');
+
+
+
+Route::get(
+    'search',
+    [SearchController::class,'index']
+)->name('search');

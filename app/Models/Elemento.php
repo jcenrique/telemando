@@ -33,4 +33,10 @@ class Elemento extends Model
     {
         return $this->hasOne(Equipo::class);
     }
+
+    
+    public function alarmas()
+    {
+        return $this->hasMany(Alarma::class);
+    }
 }

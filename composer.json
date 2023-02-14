@@ -6,13 +6,22 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "directorytree/ldaprecord-laravel": "^2.7",
         "guzzlehttp/guzzle": "^7.2",
+        "http-interop/http-factory-guzzle": "^1.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
+        "laravel/scout": "^9.8",
         "laravel/tinker": "^2.7",
+        "laraveles/spanish": "^1.5",
         "livewire/livewire": "^2.11",
+        "maatwebsite/excel": "^3.1",
+        "meilisearch/meilisearch-php": "^1.0",
+        "orchid/blade-icons": "^3.0",
         "orchid/crud": "^3.9",
-        "orchid/platform": "^13.9"
+        "orchid/platform": "^13.9",
+        "psr/simple-cache": "^1.0",
+        "vildanbina/livewire-tabs": "^1.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -61,7 +70,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",

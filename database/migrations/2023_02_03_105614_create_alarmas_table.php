@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('alarmas', function (Blueprint $table) {
             $table->id();
             $table->string('alarma');
-            $table->longText('consecuencia');
-            $table->longText('actuacion');
-            $table->foreignId('origen_id')->constrained()->on('origenes');
-            $table->foreignId('elemento_id')->constrained();
+            $table->longText('consecuencia')->nullable();
+            $table->longText('actuacion')->nullable();
+            $table->string('origen',100)->nullable();
+            $table->foreignId('elemento_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

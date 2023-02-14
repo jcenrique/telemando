@@ -4,7 +4,7 @@ namespace App\Orchid\Layouts\Telemando;
 
 use App\Models\Equipo;
 use App\Models\Ubicacion;
-use Illuminate\Support\Arr;
+
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 
@@ -51,10 +51,10 @@ class EquiposListener extends Listener
     {
 
 
-        $valor =   $this->query['ubicacion_id'];
-       
+        $valor =  $this->query->get('ubicacion_id');
 
-        
+       
+       // dd(($valor1));
         
 
         //dd($this->query['ubicacion']);
@@ -62,7 +62,7 @@ class EquiposListener extends Listener
 
         return [
             Layout::rows([
-                Input::make('ubicacion.id') ,
+             
                
                 Select::make('equipo')
                     ->empty(__('Sin selección'))

@@ -2,18 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\Examples\ExampleCardsScreen;
-use App\Orchid\Screens\Examples\ExampleChartsScreen;
-use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
-use App\Orchid\Screens\Examples\ExampleFieldsScreen;
-use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
-use App\Orchid\Screens\Examples\ExampleScreen;
-use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
-use App\Orchid\Screens\ImportarScreen;
+
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\Telemando\ElementoListScreen;
+
 use App\Orchid\Screens\Telemando\ElementoEditScreen;
 use App\Orchid\Screens\Telemando\UbicacionEditScreen;
 use App\Orchid\Screens\Telemando\UbicacionListScreen;
@@ -103,8 +96,42 @@ Route::screen('roles', RoleListScreen::class)
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');
 
-Route::screen('importar-ubicaciones', ImportarScreen::class, 'platform.screens.importar-ubicaciones');
 
+
+Route::screen('elementos/{ubicacion?}', ElementoEditScreen::class)->name('platform.elementos.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.ubicaciones')
+            ->push(__('Añadir Elementos'),route('platform.ubicaciones'));
+    });
+
+    Route::screen('elemento/{elemento}/editar', ElementoEditScreen::class)->name('platform.elemento.editar')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.ubicaciones')
+            ->push(__('Añadir Elementos'),route('platform.ubicaciones'));
+    });
+    Route::screen('elementos/{elemento}/delete', ElementoEditScreen::class)->name('platform.elemento.delete')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.ubicaciones')
+            ->push(__('Añadir Elementos'),route('platform.ubicaciones'));
+    });
+
+
+    
+Route::screen('ubicacion/{ubicacion?}', UbicacionEditScreen::class)->name('platform.ubicacion.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.ubicaciones')
+            ->push(__('Editar Ubicación'),route('platform.ubicaciones'));
+    });
+Route::screen('ubicacion/nuevo/create', UbicacionEditScreen::class)->name('platform.ubicacion.nuevo.create')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.ubicaciones')
+            ->push(__('Añadir Ubicación'),route('platform.ubicaciones'));
+    });
 
 Route::screen('ubicaciones', UbicacionListScreen::class)->name('platform.ubicaciones')
     ->breadcrumbs(function (Trail $trail) {
@@ -113,23 +140,6 @@ Route::screen('ubicaciones', UbicacionListScreen::class)->name('platform.ubicaci
             ->push(__('Ubicaciones'));
     });
 
-Route::screen('ubicacion/{ubicacion?}', UbicacionEditScreen::class)->name('platform.ubicacion.edit')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.ubicaciones')
-            ->push(__('Añadir/Editar Ubicaciones'));
-    });
 
-Route::screen('elementos', ElementoListScreen::class)->name('platform.elementos')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.index')
-            ->push(__('Elementos'));
-    });
 
-Route::screen('elementos/{ubicacion}', ElementoEditScreen::class)->name('platform.elementos.edit')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.elementos')
-            ->push(__('Añadir Elementos'));
-    });
+
