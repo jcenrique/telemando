@@ -15,13 +15,13 @@ class SearchController extends Controller
    use WithPagination;
     public function index(Request $request)
     {
-
+       
        
         $alarmas =null;
         if($query = $request->get('query')){
             $alarmas = Alarma::search($query, function($meilisearch, $query, $options){
                 return $meilisearch->search($query,$options);
-            })->paginate(15);
+            })->paginate();
      
         }
        

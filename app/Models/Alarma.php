@@ -41,22 +41,15 @@ class Alarma extends Model
         return $this->hasOne(Elemento::class);
     }
 
-    // public function toSearchableArray()
-    // {
-    //     return [
-          
-    //         'name' => $this->alarma,
-           
-    //     ];
-    // }
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        // Customize array...
-
-        return $array;
+        return [
+          
+            'alarma' => $this->alarma,
+           
+        ];
     }
+    
 
     public function presenter()
     {

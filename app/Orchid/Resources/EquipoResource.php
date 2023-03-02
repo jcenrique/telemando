@@ -2,8 +2,10 @@
 
 namespace App\Orchid\Resources;
 
+use App\Models\User;
 use App\Rules\Uppercase;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Orchid\Crud\Filters\DefaultSorted;
 use Orchid\Crud\Resource;
@@ -15,13 +17,19 @@ use Orchid\Screen\TD;
 
 class EquipoResource extends Resource
 {
+    
+
+  
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
     public static $model = \App\Models\Equipo::class;
-
+    public static function permission(): ?string
+    {
+        return 'resource-equipos';
+    }
     /**
      * Get the fields displayed by the resource.
      *
@@ -63,7 +71,7 @@ class EquipoResource extends Resource
                 }),
         ];
     }
-
+  
     /**
      * Get the sights displayed by the resource.
      *
@@ -72,7 +80,7 @@ class EquipoResource extends Resource
     public function legend(): array
     {
         return [
-            Sight::make('equipo'),
+            Sight::make('equipo', __('Equipo')),
         ];
     }
 

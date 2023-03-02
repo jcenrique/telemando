@@ -162,6 +162,10 @@
     "The application code is published under the MIT license." : "El código de la aplicación se publica bajo la licencia MIT.",
     "Showing" :"Mostrando",
     "of" :"de",
-    "results" :"resultados"
+    "results" :"resultados",
+    "All" : "Todo",
+    "Columns" :"Columnas",
+    "All Columns":"Todas las columnas",
+    "Bulk Actions":"Acciones"
     
 }

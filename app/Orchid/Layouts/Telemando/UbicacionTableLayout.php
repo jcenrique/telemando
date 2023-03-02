@@ -90,4 +90,8 @@ class UbicacionTableLayout extends Table
 
         ];
     }
+    protected function hoverable(): bool
+    {
+        return true;
+    }
 }

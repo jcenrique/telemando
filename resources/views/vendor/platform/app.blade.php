@@ -40,41 +40,25 @@
     @foreach(Dashboard::getResource('scripts') as $scripts)
         <script src="{{  $scripts }}" defer type="text/javascript"></script>
     @endforeach
-
-    @livewireStyles
-
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="js/script.js"></script>
-   
-   
-   
-       @vite('resources/css/app.css')
+  
 </head>
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
 
 <div class="container-fluid" data-controller="@yield('controller')" @yield('controller-data')>
 
-    
-    @livewire('show-alarmas')
-        
     <div class="row">
         @yield('body-left')
 
-        <div class="col min-vh-100 overflow-hidden">
+        <div class="col min-vh-100 overflow-hidden ">
             <div class="d-flex flex-column-fluid">
-                <div class="container-md h-full px-0 px-md-5">
+                <div class="container-fluid h-full m-0 px-0">
+                    
                     @yield('body-right')
                 </div>
             </div>
         </div>
     </div>
-
-
-    @include('platform::partials.toast')
-</div>
-    @livewireScripts
 
 
     @include('platform::partials.toast')

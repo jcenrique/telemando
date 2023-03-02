@@ -185,8 +185,9 @@ return [
         /*
          * Package Service Providers...
          */
-
-
+      
+         App\Providers\FortifyServiceProvider::class,
+         App\Providers\PermissionsProvider::class,
         /*
          * Application Service Providers...
          */

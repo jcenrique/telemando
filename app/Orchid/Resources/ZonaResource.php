@@ -10,17 +10,23 @@ use Orchid\Crud\Filters\DefaultSorted;
 use Orchid\Crud\Resource;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
+use Orchid\Screen\Sight;
 use Orchid\Screen\TD;
 
 class ZonaResource extends Resource
 {
+    public static function permission(): ?string
+    {
+        return 'resource-zonas';
+    }
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
+    
     public static $model = \App\Models\Zona::class;
-
+  
     /**
      * Get the fields displayed by the resource.
      *
@@ -72,7 +78,7 @@ class ZonaResource extends Resource
     public function legend(): array
     {
         return [
-            'Zona',
+            Sight::make('zona'),
         ];
     }
 

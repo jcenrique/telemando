@@ -17,7 +17,7 @@ class Uppercase implements InvokableRule
     public function __invoke($attribute, $value, $fail)
     {
         if (strtoupper($value) !== $value) {
-            $fail(__('El :attribute debe ser en mayúsculas.'));
+            $fail(__('El campo debe ser en mayúsculas.'));
         }
     }
 }

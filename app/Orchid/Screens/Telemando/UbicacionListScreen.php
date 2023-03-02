@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Telemando;
 
 use App\Models\Ubicacion;
 use App\Models\Zona;
+use App\Orchid\Filters\PoblaciónQueryFilter;
 use App\Orchid\Filters\ZonaQueryFilter;
 use App\Orchid\Layouts\Telemando\UbicacionFiltersLayout;
 use App\Orchid\Layouts\Telemando\UbicacionTableLayout;
@@ -17,6 +18,13 @@ use Orchid\Support\Facades\Toast;
 
 class UbicacionListScreen extends Screen
 {
+
+    public function permission(): ?iterable
+    {
+        return [
+            'ubicaciones'
+        ];
+    }
     /**
      * Fetch data to be displayed on the screen.
      *

@@ -48,9 +48,9 @@ class PlatformScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Alarmas inicio')
+            Link::make('Inicio')
                 ->route('inicio')
-                ->icon('bell'),
+                ->icon('home'),
 
         ];
     }

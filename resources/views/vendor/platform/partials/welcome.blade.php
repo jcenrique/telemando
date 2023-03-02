@@ -13,7 +13,7 @@
             </p>
         </div>
         <div class="d-none d-lg-block col align-self-center text-end text-muted p-4">
-            <x-orchid-icon path="bell" width="6em" height="100%"/>
+            <x-orchid-icon path="database" width="6em" height="100%"/>
         </div>
     </div>
 
@@ -74,16 +74,18 @@
             </p>
         </div>
         
-        {{-- <div class="col-md-6 my-2">
+        <div class="col-md-6 my-2">
             <h3 class="text-muted fw-light">
-                <x-orchid-icon path="help"/>
-                <span class="ms-3 text-dark">Community</span>
+                <x-orchid-icon path="'fa.charging-station"/>
+                <span class="ms-3 text-dark">Suministros electricos</span>
             </h3>
             <div class="ms-md-5 ps-md-1">
-                <p></p>
+                <p>
+                    Gestiona la lista de todos los suministros de baja tensión de ETS, podras consutar los datos relevantes y editarlos
+                </p>
                
             </div>
-        </div> --}}
+        </div>
     </div>
 
 

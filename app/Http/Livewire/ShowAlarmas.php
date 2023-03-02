@@ -15,6 +15,8 @@ class ShowAlarmas extends Component
 {
     use WithPagination;
     
+    public $tabs;
+
     public $zonas;
    
     public $zona_id;
@@ -41,6 +43,9 @@ class ShowAlarmas extends Component
 
     protected $paginationTheme = 'bootstrap';
     public $busquedaUbicacion="";
+
+public $classTab;
+
     public function mount()
     {
         $this->zonas = Zona::all()->sortBy("zona");
@@ -97,12 +102,21 @@ class ShowAlarmas extends Component
                                 ->orderBy('elemento', 'asc')
                                 ->get();
         $this->array_elementos =json_encode( \Illuminate\Support\Arr::pluck($this->elementos->toArray(),['elemento']));
-
-// dd($this->elementos);
+       
     }
 
-    public function updatingSearch()
+    public function elementoClick($elemento_id)
+
     {
+
+        $this->emitTo($elemento_id, 'clickElemento');
+        $this->classTab='text-red-500';
+       // dd($elemento_id);
+    }
+
+    public function resetTabs()
+    {
+     
         $this->resetPage();
     }
    

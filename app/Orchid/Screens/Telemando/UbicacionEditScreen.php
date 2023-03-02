@@ -18,6 +18,13 @@ use Orchid\Support\Facades\Toast;
 
 class UbicacionEditScreen extends Screen
 {
+
+    public function permission(): ?iterable
+    {
+        return [
+            'ubicaciones'
+        ];
+    }
     /**
      * Fetch data to be displayed on the screen.
      *

@@ -30,5 +30,8 @@ class Zona extends Model
     {
         return $this->belongsTo(Ubicacion::class);
     }
-
+    public function suministros()
+    {
+        return $this->belongsTo(Suministro::class);
+    }
 }

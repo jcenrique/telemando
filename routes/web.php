@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AlarmaController;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SuministrosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->name('inicio');
 
 
@@ -25,3 +27,11 @@ Route::get(
     'search',
     [SearchController::class,'index']
 )->name('search');
+
+Route::get('suministros/export/', [SuministrosController::class, 'export'])->name('suministros.export');
+
+
+Route::get('suministros', [InicioController::class, 'suministros'])->name('suministros');
+Route::get('alarmas', [InicioController::class, 'alarmas'])->name('alarmas');
+
+Route::get('alarmas-pruebas', [InicioController::class, 'alarmaspruebas'])->name('alarmas-pruebas');

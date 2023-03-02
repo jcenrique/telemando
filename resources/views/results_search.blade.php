@@ -62,9 +62,9 @@
 
                     <div class=" flex h-16 items-center  pr-4">
 
-                        <a href="/" title="Inicio"
+                        <a href="/alarmas" title="Inicio"
                             class="cursor-pointer hover:bg-gray-200 text-gray-900 text-sm  p-2 bg-gray-50 rounded-lg">
-                            <x-orchid-icon path="home" class="text-gray-500" />
+                            <x-orchid-icon path="bell" class="text-gray-500" />
                         </a>
                     </div>
                     

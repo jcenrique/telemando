@@ -28,10 +28,10 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-                  
-            Menu::make('Ver alarmas')
-           
-                ->icon('fa.bell')
+
+            Menu::make('Inicio')
+
+                ->icon('home')
                 ->route('inicio'),
 
             Menu::make(__('Users'))
@@ -44,18 +44,40 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('lock')
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
-                
-            
 
-            Menu::make('Ubicaciones')
-            ->title('Localizaciones')
+
+            Menu::make('Suministros')
+                ->title('Principal')
+                // ->permission('suministros')
+                ->icon('fa.charging-station')
+                ->route('platform.suministros'),
+
+            Menu::make('Ubicaciones y alarmas')
+
+                ->permission('ubicaciones')
                 ->icon('fa.map-location-dot')
                 ->route('platform.ubicaciones'),
 
-              
-         
+            Menu::make('Flota')
+                ->slug('sub-menu')
+                ->icon('car-on')
+                ->list([
+                    Menu::make('Vehículos')->icon('car')->route('platform.vehiculos'),
+                    Menu::make('Tipos vehículos')->icon('truck-monster')->route('platform.vehiculos.tipos'),
+                    Menu::make('Marcas')->icon('copyright')->route('platform.vehiculos.marcas'),
+                    Menu::make('Modelos')->icon('circle-info')->route('platform.vehiculos.modelos'),
+                    Menu::make('Tecnologias')->icon('bolt')->route('platform.vehiculos.tecnologias'),
+                    Menu::make('Detalle tecnologias')->icon('charging-station')->route('platform.vehiculos.detalles-tecnologias'),
+                    Menu::make('Registro Kilómetros')->icon('road')->route('platform.vehiculos.kilometros'),
 
-                
+                ]),
+            
+
+
+
+
+
+
         ];
     }
 

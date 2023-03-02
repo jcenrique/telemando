@@ -43,6 +43,13 @@ class ElementoEditScreen extends Screen
 
     public $equipo_id;
 
+
+    public function permission(): ?iterable
+    {
+        return [
+            'ubicaciones'
+        ];
+    }
     public function query(Ubicacion $ubicacion): iterable
     {
 
