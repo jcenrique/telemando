@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('gastos', function (Blueprint $table) {
+        Schema::create('repostajes', function (Blueprint $table) {
             $table->id();
-            $table->double('gasto');
+            $table->double('litros');
+            $table->double('importe');
+            $table->string('combustible');
             $table->date('fecha');
             $table->foreignId('vehiculo_id')->constrained()->on('vehiculos')->cascadeOnDelete();
             $table->timestamps();
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gastos');
+        Schema::dropIfExists('repostajes');
     }
 };

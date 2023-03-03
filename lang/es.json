@@ -62,7 +62,7 @@
     "Product, promo code, or slogan (e.g. spring_sale)": "Producto, código promocional o eslogan (ej. oferta_de_primavera)",
     "There are no records in this view": "No hay registros en esta vista",
     "Remember Me": "Recordarme",
-    "Remove": "Quitar",
+    "Remove": "Eliminar",
     "Role": "Rol",
     "Role was removed": "El rol fue eliminado",
     "Role was saved": "El rol fue guardado",
@@ -105,7 +105,7 @@
     "Media catalog": "Catálogo de medios",
     "Important events you follow": "Eventos importantes que sigues",
     "Messages": "Mensajes",
-    "Remove all": "Quitar todo",
+    "Remove all": "Eliminar todo",
     "All messages have been read.": "Todos los mensajes han sido leídos.",
     "All messages have been deleted.": "Todos los mensajes han sido eliminados.",
     "You currently have no notifications, but maybe they will appear later.": "Actualmente no tiene notificaciones, pero pueden aparecer luego.",
@@ -162,6 +162,8 @@
     "The application code is published under the MIT license." : "El código de la aplicación se publica bajo la licencia MIT.",
     "Showing" :"Mostrando",
     "of" :"de",
-    "Columns" :"Columnas"
+    "Columns" :"Columnas",
+    "There are no objects currently displayed":"No hay objetos actualmente mostrados",
+    
     
 }

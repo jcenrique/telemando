@@ -42,6 +42,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make(__('Roles'))
                 ->icon('lock')
+                ->divider()
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),
 
@@ -53,13 +54,15 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.suministros'),
 
             Menu::make('Ubicaciones y alarmas')
-
+           
                 ->permission('ubicaciones')
                 ->icon('fa.map-location-dot')
                 ->route('platform.ubicaciones'),
 
             Menu::make('Flota')
                 ->slug('sub-menu')
+                ->divider()
+                ->style('background-color:#502020;')
                 ->icon('car-on')
                 ->list([
                     Menu::make('Vehículos')->icon('car')->route('platform.vehiculos'),
@@ -69,6 +72,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Tecnologias')->icon('bolt')->route('platform.vehiculos.tecnologias'),
                     Menu::make('Detalle tecnologias')->icon('charging-station')->route('platform.vehiculos.detalles-tecnologias'),
                     Menu::make('Registro Kilómetros')->icon('road')->route('platform.vehiculos.kilometros'),
+                    Menu::make('Repostajes')->icon('gas-pump')->route('platform.vehiculos.repostajes'),
 
                 ]),
             

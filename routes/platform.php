@@ -30,6 +30,7 @@ use App\Orchid\Screens\Vehiculos\VehiculoListScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\Vehiculos\TipoVehiculoListScreen;
+use App\Orchid\Screens\Vehiculos\RespostajesVehiculosScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -344,3 +345,12 @@ Route::screen('vehiculos/kilometros', KilometrosVehiculosScreen::class)
 
         ->parent('platform.vehiculos')
         ->push(__('Kilometros Vehiculos'), route('platform.vehiculos.kilometros')));
+
+//repostajes
+
+Route::screen('vehiculos/repostajes', RespostajesVehiculosScreen::class)
+    ->name('platform.vehiculos.repostajes')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+
+        ->parent('platform.vehiculos')
+        ->push(__('Kilometros Vehiculos'), route('platform.vehiculos.repostajes')));

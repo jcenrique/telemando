@@ -90,6 +90,6 @@ class SuministroImport implements ToModel, SkipsEmptyRows,SkipsOnFailure
 
     public function onFailure(Failure ...$failures)
     {
-        dd($failures);
+        
     }
 }

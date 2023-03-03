@@ -68,7 +68,7 @@
                     {!!  $textNotFound !!}
                 </h3>
 
-                 {!! $subNotFound !!}
+                 {{-- {!! $subNotFound !!} --}}
             </div>
         </div>
     @else

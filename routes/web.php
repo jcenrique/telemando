@@ -30,6 +30,8 @@ Route::get(
 
 Route::get('suministros/export/', [SuministrosController::class, 'export'])->name('suministros.export');
 
+Route::get('suministros/import/', [SuministrosController::class, 'import'])->name('suministros.import');
+
 
 Route::get('suministros', [InicioController::class, 'suministros'])->name('suministros');
 Route::get('alarmas', [InicioController::class, 'alarmas'])->name('alarmas');

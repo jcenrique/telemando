@@ -7,23 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class Gasto extends Model
+class Repostaje extends Model
 {
     use HasFactory;
     use AsSource, Filterable;
 
     
-    protected $table ='gastos';
+    protected $table ='repostajes';
 
     protected $fillable = [
-        'gasto',
+        'litros',
+        'importe',
         'vehiculo_id',
         'fecha'
         
     ];
     protected $allowedSorts = [
-        'gasto',
-        'vehiculo_id',
+        'litros',
+        'importe',
         'fecha',
         'created_at',
         'updated_at'
@@ -31,6 +32,6 @@ class Gasto extends Model
 
     public function vehiculos()
     {
-        return $this->hasMany(Vehiculo::class);
+        return $this->belongsTo(Vehiculo::class);
     }
 }

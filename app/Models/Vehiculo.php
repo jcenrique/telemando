@@ -88,9 +88,9 @@ class Vehiculo extends Model
         
     }
 
-    public function gastos()
+    public function repostajes()
     {
-        return $this->hasMany(Gasto::class);
+        return $this->hasMany(Repostaje::class)->orderByDesc('fecha');
     }
 
     public function kilometrajes()

@@ -81,6 +81,7 @@ class KilometrosVehiculoListener extends Listener
                   ->fromQuery(Departamento::whereIn('id' , $array_departamentos),'departamento'),
 
                 Matrix::make('kilometros')
+                
                     ->canSee($roles_permitidos != 0)
                     ->title('Kilometros vehículos')
                     ->columns([
@@ -95,7 +96,7 @@ class KilometrosVehiculoListener extends Listener
                             ->empty(__('Selecciona o escribe la matrícula'))
                             ->fromQuery(Vehiculo::where('departamento_id', '=', $this->query['departamento_id']), 'matricula'),
                         'kilometraje' => Input::make('kilometraje')->type('number')->required()->placeholder(__('Introduce los kilometros')),
-                        'fecha' => DateTimer::make('fecha')->placeholder(__('Introduce la fecha'))->format('Y-m-d')->required(),
+                        'fecha' => DateTimer::make('fecha')->placeholder(__('Introduce la fecha'))->required()->format('Y-m-d'),
 
 
                     ]),

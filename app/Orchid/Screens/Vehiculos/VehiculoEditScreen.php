@@ -10,6 +10,7 @@ use App\Models\Tipovehiculo;
 use App\Models\Vehiculo;
 use App\Orchid\Layouts\Vehiculos\MarcaVehiculoListener;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
@@ -29,6 +30,8 @@ class VehiculoEditScreen extends Screen
 {
 
     public $vehiculo;
+
+    private $roles_permitidos;
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -36,7 +39,16 @@ class VehiculoEditScreen extends Screen
      */
     public function query(Vehiculo $vehiculo): iterable
     {
+        $this->roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota', 'admin'])->count();
+        $user_id =  Auth::user()->id;
+        if($this->roles_permitidos == 0){
+            $array_departamentos = Departamento::where('user_id', $user_id)->get()->pluck('id')->toArray();
+            if(sizeof( $array_departamentos) > 0) $this->roles_permitidos =1;
+        }else{
+            $array_departamentos = Departamento::all()->pluck('id')->toArray();
+        }
 
+   
 
         return [
             'vehiculo' => $vehiculo,
@@ -64,27 +76,27 @@ class VehiculoEditScreen extends Screen
             Button::make('Crear')
                 ->icon('pencil')
                 ->method('createOrUpdate')
-                ->canSee(!$this->vehiculo->exists),
+                ->canSee(!$this->vehiculo->exists && ($this->roles_permitidos>0)),
 
             Button::make('Update')
                 ->icon('note')
                 ->method('createOrUpdate')
-                ->canSee($this->vehiculo->exists),
+                ->canSee($this->vehiculo->exists && ($this->roles_permitidos>0)),
 
             Button::make('Remove')
                 ->icon('trash')
                 ->method('remove')
-                ->canSee($this->vehiculo->exists),
+                ->canSee($this->vehiculo->exists && ($this->roles_permitidos>0)),
 
             Button::make('Baja')
-                ->icon('up')
+                ->icon('thumbs-down')
                 ->method('baja')
-                ->canSee($this->vehiculo->exists && ($this->vehiculo->fecha_baja == null)),
+                ->canSee($this->vehiculo->exists && ($this->vehiculo->fecha_baja == null) && ($this->roles_permitidos>0)),
 
             Button::make('Alta')
-                ->icon('down')
+                ->icon('thumbs-up')
                 ->method('alta')
-                ->canSee($this->vehiculo->exists && ($this->vehiculo->fecha_baja != null)),
+                ->canSee($this->vehiculo->exists && ($this->vehiculo->fecha_baja != null) && ($this->roles_permitidos>0)),
         ];
     }
 
@@ -161,37 +173,82 @@ class VehiculoEditScreen extends Screen
               
 
             ]),
-            Layout::table('vehiculo.kilometrajes',[
-                TD::make('fecha',__('Fecha registro de datos'))->cantHide(false),
-                TD::make('kilometraje',__('Kilometraje'))->cantHide(false)
-                    ->render(function($model){
-                        return $model->kilometraje . ' km';
-                    }),
+            Layout::columns([
+ //kilometros
+ Layout::table('vehiculo.kilometrajes',[
+    TD::make('fecha',__('Fecha registro de datos'))->cantHide(false),
+    TD::make('kilometraje',__('Kilometraje'))->cantHide(false)
+        ->render(function($model){
+            return $model->kilometraje . ' km.';
+        }),
+    
+
+        TD::make(__('Actions'))
+        ->cantHide(false)
+        ->align(TD::ALIGN_CENTER)
+        ->width('100px')
+        ->canSee($this->roles_permitidos>0)
+        ->render(fn ($model) => DropDown::make()
+            ->icon('options-vertical')
+            ->list([
+
+                Link::make(__('Edit'))
+                    ->route('platform.vehiculos.kilometraje.edit', [$model])
+                    ->canSee($this->roles_permitidos>0)
+                    ->icon('pencil'),
+
+                Button::make(__('Delete'))
+                    ->icon('trash')
+                    ->canSee($this->roles_permitidos>0)
+                    ->confirm(__('El registro seleccionado se va eliminar, ¿está usted seguro?'))
+                    ->method('removeKilometraje', [
+                        'id' => $model->id,
+                    ]),
                 
+            ])),
 
-                    TD::make(__('Actions'))
-                    ->align(TD::ALIGN_CENTER)
-                    ->width('100px')
-                    ->render(fn ($model) => DropDown::make()
-                        ->icon('options-vertical')
-                        ->list([
+ ])->title(__('Kilometros')),
+
+//kilometros
+Layout::table('vehiculo.repostajes',[
+    TD::make('fecha',__('Fecha registro de datos'))->cantHide(false),
+    TD::make('litros',__('Litros'))->cantHide(false)
+        ->render(function($model){
+            return $model->litros . ' l.';
+        }),
+        TD::make('importe',__('Importe'))->cantHide(false)
+        ->render(function($model){
+            return $model->inporte . ' €';
+        }),
     
-                            Link::make(__('Edit'))
-                                ->route('platform.vehiculos.kilometraje.edit', [$model])
-                                ->icon('pencil'),
-    
-                            Button::make(__('Delete'))
-                                ->icon('trash')
-                                ->confirm(__('El registro seleccionado se va eliminar, ¿está usted seguro?'))
-                                ->method('removeKilometraje', [
-                                    'id' => $model->id,
-                                ]),
-                            
-                        ])),
 
-             ]),
+        TD::make(__('Actions'))
+        ->cantHide(false)
+        ->align(TD::ALIGN_CENTER)
+        ->width('100px')
+        ->canSee($this->roles_permitidos>0)
+        ->render(fn ($model) => DropDown::make()
+            ->icon('options-vertical')
+            ->list([
 
+                Link::make(__('Edit'))
+                    //->route('platform.vehiculos.kilometraje.edit', [$model])
+                    ->canSee($this->roles_permitidos>0)
+                    ->icon('pencil'),
 
+                Button::make(__('Delete'))
+                    ->icon('trash')
+                    ->canSee($this->roles_permitidos>0)
+                    ->confirm(__('El registro seleccionado se va eliminar, ¿está usted seguro?')),
+                    // ->method('removeKilometraje', [
+                    //     'id' => $model->id,
+                    // ]),
+                
+            ])),
+
+ ])->title(__('Repostajes')),
+            ]),
+           
         ];
     }
 

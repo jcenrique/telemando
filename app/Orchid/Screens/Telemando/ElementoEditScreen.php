@@ -150,7 +150,7 @@ class ElementoEditScreen extends Screen
 
                     ])
 
-                ])->title(__('Cargar fichero Excel de alarmas'))->async('asyncGetElemento'),
+                ])->title(__('Cargar fichero Excel de alarmas')),
 
 
 
@@ -223,7 +223,7 @@ class ElementoEditScreen extends Screen
 
 
 
-    public function asyncGetElemento(Elemento $elemento): iterable
+    public function asyncGetElemento($elemento): iterable
     {
 
         return [

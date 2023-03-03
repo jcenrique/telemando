@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Orchid\Screens\Suministros;
+namespace App\Orchid\Screens\Vehiculos;
 
-use App\Exports\SuministrosExport;
-use App\Imports\SuministroImport;
-use App\Models\Suministro;
-use App\Orchid\Filters\ZonaQueryFilter;
-use App\Orchid\Layouts\Suministros\PoblacionFiltersLayout;
-use App\Orchid\Layouts\Suministros\SuministroTableLayout;
-use App\Orchid\Layouts\Telemando\UbicacionFiltersLayout;
+use App\Imports\RepostajesImport;
+use App\Models\Departamento;
+use App\Models\Repostaje;
+use App\Orchid\Layouts\Vehiculos\RepostajeVehiculoLayoutTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-use Maatwebsite\Excel\Facades\Excel;
-use Orchid\Screen\Actions\Button;
 
-class SuministroListScreen extends Screen
+class RespostajesVehiculosScreen extends Screen
 {
+
+    public $roles_permitidos;
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -29,8 +28,12 @@ class SuministroListScreen extends Screen
      */
     public function query(): iterable
     {
+
+        $this->roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota', 'admin'])->count();
+        
+
         return [
-            'suministros' =>  Suministro::filters([ZonaQueryFilter::class])->paginate(),
+            'repostajes' => Repostaje::filters()->paginate()
         ];
     }
 
@@ -41,13 +44,8 @@ class SuministroListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Suministros de energía';
+        return __('Respostajes Vehículo');
     }
-    public function description(): ?string
-    {
-        return __('Listado completo de los suministros de energía instalaciones ETS');
-    }
-
 
     /**
      * The screen's action buttons.
@@ -57,22 +55,11 @@ class SuministroListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-
-            Link::make(__('Crear nuevo'))
-            ->icon('pencil')
-            ->route('platform.suministro.create'),
-
             ModalToggle::make(__('Importar'))
-                ->modal('abrirFicheroExcel')
-                ->method('importar')
-                          
-                ->icon('upload'),
-            
-                Link::make(__('Exportar'))
-            ->icon('download')
-            ->route('suministros.export')
-            ,
-
+            ->modal('abrirFicheroExcel')
+            ->method('importar')
+                      
+            ->icon('upload'),
         ];
     }
 
@@ -86,27 +73,27 @@ class SuministroListScreen extends Screen
         return [
 
            
-            
-            SuministroTableLayout::class,
-            Layout::modal('abrirFicheroExcel', [
                 Layout::rows([
-
-                 
+               
 
                     Input::make('archivo')->type('file')
-                        ->title(__('Selecciona un archivo Excel de suministros electricos'))
-                        ->required()
+                        ->title(__('Selecciona un archivo Excel de repostajes de vehículos'))
+                        ->required(),
+                    
+                    Button::make('Importar')
+                        ->method('importar')
 
 
-                ])
 
-            ])->title(__('Cargar fichero Excel de suministros')),
+            ])->title(__('Cargar fichero Excel de kilómetros')),
+            RepostajeVehiculoLayoutTable::class,
+            
         ];
     }
 
     public function importar(Request $request)
     {
-        // dd($ubicacion->id, $request->get('equipo_id'));
+      
 
         //borrar registros anteriores
 
@@ -122,8 +109,8 @@ class SuministroListScreen extends Screen
         //leer las hojas y crear lon nuevos elementos en la DB 
 
 
-
-            $importHoja = new SuministroImport();
+           
+            $importHoja = new RepostajesImport();
 
            
             Excel::import($importHoja, $filePath);
@@ -140,8 +127,7 @@ class SuministroListScreen extends Screen
 
 
 
-        Toast::info(__('Suministros importados a la DB!.'));
+        Toast::info(__('Alarmas importadas a la DB!.'));
     }
     
-  
 }
