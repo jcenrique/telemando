@@ -115,13 +115,19 @@ class SuministroEditScreen extends Screen
                         ->title(__('CUP'))
                         ->placeholder(__('Introduzca el CUP')),
 
+                    Select::make('suministro.telegestion')
+                        ->title(__('Telegestión'))
+                        ->empty()
+                        ->options([ 1 =>  'SI', 0 => 'NO'])
+                        ->help(__('Seleccionar si dispone de telemedida, si se conoce')),
+
                     Select::make('suministro.tipo_id')
                         ->empty()
                         ->title(__('Tipo de suministro'))
                         ->fromModel(Tipo::class, 'tipo', 'id')
                         ->help(__('Seleccionar el tipo suministro si se conoce')),
                     Input::make('suministro.instalacion')
-                     
+
                         ->title(__('Instalación'))
                         ->placeholder(__('Introduzca la instalación'))
                         ->help(__('Debe introducir el tipo instalación a la que el suministro porporciona energía')),
@@ -200,18 +206,24 @@ class SuministroEditScreen extends Screen
 
                     Select::make('suministro.medida')
                         ->empty()
-                        ->options(['DIRECTA' =>'DIRECTA', 'INDIRECTA' => 'INDIRECTA'])
+                        ->options(['DIRECTA' => 'DIRECTA', 'INDIRECTA' => 'INDIRECTA'])
                         ->title(__('Tipo de medida'))
                         ->help(__('Debe elegir el tipo de medida del suministro si se conoce')),
                     Select::make('suministro.icp')
                         ->empty()
-                        ->options(['DISTRIBUIDORA' =>'DISTRIBUIDORA', 'SI' =>  'SI', 'NO' => 'NO'])
+                        ->options(['DISTRIBUIDORA' => 'DISTRIBUIDORA', 'SI' =>  'SI', 'NO' => 'NO'])
+                        ->title(__('ICP'))
+                        ->help(__('Debe elegir ICP del suministro si se conoce')),
+                    
+                        Select::make('suministro.comercializadora')
+                        ->empty()
+                        ->options(['CUR' => 'CUR', 'CLIENTES' =>  'CLIENTES'])
                         ->title(__('ICP'))
                         ->help(__('Debe elegir ICP del suministro si se conoce')),
 
                     Select::make('suministro.contador')
                         ->empty()
-                        ->options(['DISTRIBUIDORA' => 'DISTRIBUIDORA', 'SI' => 'SI', 'CLIENTE' =>'CLIENTE', 'i-DE' =>  'i-DE'])
+                        ->options(['DISTRIBUIDORA' => 'DISTRIBUIDORA', 'SI' => 'SI', 'CLIENTE' => 'CLIENTE', 'i-DE' =>  'i-DE'])
                         ->title(__('Contador'))
                         ->help(__('Debe elegir la pertenecia del contador del suministro si se conoce')),
 
@@ -238,7 +250,7 @@ class SuministroEditScreen extends Screen
     {
 
 
-       // dd($request);
+        // dd($request);
 
         $suministro->fill($request->get('suministro'))->save();
         $this->suministro = $suministro;

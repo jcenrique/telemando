@@ -12,7 +12,7 @@
      data-controller="table"
      data-table-slug="{{$slug}}"
 >
-
+   
     <div class="table-responsive">
         <table @class([
                     'table',

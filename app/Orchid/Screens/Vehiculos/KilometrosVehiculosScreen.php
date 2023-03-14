@@ -4,7 +4,7 @@ namespace App\Orchid\Screens\Vehiculos;
 
 use App\Models\Departamento;
 use App\Models\Kilometraje;
-
+use App\Models\User;
 use App\Models\Vehiculo;
 use App\Orchid\Layouts\Vehiculos\KilometrosVehiculoListener;
 use Carbon\Carbon;
@@ -30,17 +30,33 @@ class KilometrosVehiculosScreen extends Screen
      */
     public function query(): iterable
     {
-        $this->roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota', 'admin'])->count();
+        $this->roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota' ,'admin'])->count();
         $user_id =  Auth::user()->id;
+        $user = User::with('departamentos')->where('id',$user_id)->first();
+        $departamentos_id = $user->departamentos()->get()->pluck('id')->toArray();
+        
+      
         if($this->roles_permitidos == 0){
-            $array_departamentos = Departamento::where('user_id', $user_id)->get()->pluck('id')->toArray();
+            $array_departamentos =   $departamentos_id ;
+          
             if(sizeof( $array_departamentos) > 0) $this->roles_permitidos =1;
         }else{
             $array_departamentos = Departamento::all()->pluck('id')->toArray();
         }
 
    
-        return [];
+        return [
+        
+        ];
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'flota',
+            'admin',
+            'kilometros'
+        ];
     }
 
     /**
@@ -103,23 +119,24 @@ class KilometrosVehiculosScreen extends Screen
         
         $arrayKilometraje = $this->unique_multidim_array($arrayKilometraje,'vehiculo_id');
        $mensajeerror ='';
-     
-       DB::transaction(function () use($mensajeerror,$arrayKilometraje) { //comenzar la transaccion 
+   
+      // DB::transaction(function () use($mensajeerror,$arrayKilometraje) { //comenzar la transaccion 
        
         foreach ($arrayKilometraje as $key => $kilometraje) {
+            
+            
            $max_kilometros = Kilometraje::where('vehiculo_id', $kilometraje['vehiculo_id'])->get()->max('kilometraje');
-
-           $ultima_fecha_registrada =Carbon::createFromFormat('Y-m-d',Kilometraje::where('vehiculo_id', $kilometraje['vehiculo_id'])->get()->max('fecha'));
+           $max_fecha = Kilometraje::where('vehiculo_id', $kilometraje['vehiculo_id'])->get()->max('fecha');
+         
+           $ultima_fecha_registrada =is_null($max_fecha)? Carbon::createFromFormat('Y-m-d', '2000-01-01') : Carbon::createFromFormat('Y-m-d',$max_fecha);
            $fecha_introducida =Carbon::createFromFormat('Y-m-d', $kilometraje['fecha']);
+    
 
-           $result = $ultima_fecha_registrada->gt($fecha_introducida);
-     //   var_dump($result);
-
-           //dd($ultima_fecha_registrada , $fecha_introducida);
+         
             if(($max_kilometros> intval( $kilometraje['kilometraje'])) || ($ultima_fecha_registrada->gt($fecha_introducida)) ){
                 //descartar datos si los kilometros o la fecha son inferiores a la ultima ocasion
                 //registrar un mensaje con los errores
-              
+             
                 if($max_kilometros >  intval( $kilometraje['kilometraje'])){
                  
                     $mensajeerror = $mensajeerror . 'Los datos de la matricula: <strong>' . Vehiculo::find($kilometraje['vehiculo_id'])->matricula . '</strong> , se han descartado por ser los kilometros inferirores al último registro<br>';
@@ -127,26 +144,32 @@ class KilometrosVehiculosScreen extends Screen
                   
                     $mensajeerror = $mensajeerror . 'Los datos de la matricula: <strong>' . Vehiculo::find($kilometraje['vehiculo_id'])->matricula . '</strong> , se han descartado por ser la fecha inferior o igual al último registro<br>';
                 }
-
+               
             }else{
                 //guardar los validos
                 DB::table('kilometrajes')->insert([
                     'kilometraje' => $kilometraje['kilometraje'],
                     'vehiculo_id' => $kilometraje['vehiculo_id'],
-                    'fecha' => $fecha_introducida
+                    'fecha' => $fecha_introducida,
+                    'update_at' => Carbon::now(),
+                    'created_at' => Carbon::now(),
+
                 ]);
 
             }
 
            
         }//fin de la transaccion
-    });
+       
+   // });
+
+  
         $color = $mensajeerror != '' ? Color::WARNING() :Color::SUCCESS();
         $mensaje =  $mensajeerror != '' ? $mensajeerror : __('Datos guardados correctamente');
         Alert::view('layouts.alert-personal', $color, [
             'mensaje' => $mensaje
         ]);
-        return redirect()->route('platform.vehiculos.kilometros');
+       // return redirect()->route('platform.vehiculos.kilometros');
     }
 
     public function asyncKilometros($departamento)
@@ -185,5 +208,6 @@ class KilometrosVehiculosScreen extends Screen
         return $temp_array;
     
     }
+
     
 }

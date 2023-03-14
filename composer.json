@@ -21,10 +21,10 @@
         "orchid/blade-icons": "^3.0",
         "orchid/crud": "^3.9",
         "orchid/platform": "^13.9",
+        "owen-it/laravel-auditing": "^13.1",
         "psr/simple-cache": "^1.0",
         "rappasoft/laravel-livewire-tables": "^2.11",
         "rutorika/sortable": "^9.0"
-       
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

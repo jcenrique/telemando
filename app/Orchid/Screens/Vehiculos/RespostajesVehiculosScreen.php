@@ -4,8 +4,12 @@ namespace App\Orchid\Screens\Vehiculos;
 
 use App\Imports\RepostajesImport;
 use App\Models\Departamento;
+use App\Models\Kilometraje;
 use App\Models\Repostaje;
+use App\Orchid\Filters\MatriculaFilter;
+use App\Orchid\Filters\RepostajeMatriculaFilter;
 use App\Orchid\Layouts\Vehiculos\RepostajeVehiculoLayoutTable;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,6 +18,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -21,6 +26,8 @@ class RespostajesVehiculosScreen extends Screen
 {
 
     public $roles_permitidos;
+  
+   public $repostajes_importados;
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -33,7 +40,7 @@ class RespostajesVehiculosScreen extends Screen
         
 
         return [
-            'repostajes' => Repostaje::filters()->paginate()
+            'repostajes' => Repostaje::with('vehiculo')->filters()->paginate()
         ];
     }
 
@@ -60,7 +67,7 @@ class RespostajesVehiculosScreen extends Screen
             ->method('importar')
                       
             ->icon('upload'),
-        ];
+         ];
     }
 
     /**
@@ -70,23 +77,34 @@ class RespostajesVehiculosScreen extends Screen
      */
     public function layout(): iterable
     {
+//$builder = Repostaje::filters();
+  //     dump($builder->get());
         return [
 
            
+
+           
+          RepostajeVehiculoLayoutTable::class,
+            Layout::modal('abrirFicheroExcel', [
                 Layout::rows([
-               
 
                     Input::make('archivo')->type('file')
-                        ->title(__('Selecciona un archivo Excel de repostajes de vehículos'))
-                        ->required(),
-                    
-                    Button::make('Importar')
-                        ->method('importar')
+                    ->title(__('Selecciona un archivo Excel de repostajes de vehículos'))
+                    ->required(),
+                
+                Button::make('Importar')
+                    ->method('importar')
 
 
 
-            ])->title(__('Cargar fichero Excel de kilómetros')),
-            RepostajeVehiculoLayoutTable::class,
+                ])
+
+            ])->title(__('Cargar fichero Excel de repostajes')),
+           
+       
+           
+
+           // Layout::view('admin.kilometraje-table', ['repostajes_importados' =>$this->repostajes_importados])
             
         ];
     }
@@ -96,6 +114,10 @@ class RespostajesVehiculosScreen extends Screen
       
 
         //borrar registros anteriores
+        $fecha_importacion =Carbon::now()->format('Y-m-d');
+        Repostaje::where('fecha_importacion', $fecha_importacion)->delete();
+
+     
 
         //cargar el archivo , falta validarlo para evitar errores
 
@@ -110,24 +132,15 @@ class RespostajesVehiculosScreen extends Screen
 
 
            
-            $importHoja = new RepostajesImport();
+            $importHoja = new RepostajesImport( $fecha_importacion );
 
            
-            Excel::import($importHoja, $filePath);
-        
+           Excel::import($importHoja, $filePath);
+             $this->repostajes_importados=$importHoja->data;
 
-            foreach ($importHoja->failures() as $failure) {
-                $failure->row(); // row that went wrong
-                $failure->attribute(); // either heading key (if using heading row concern) or column index
-                $failure->errors(); // Actual error messages from Laravel validator
-                $failure->values(); // The values of the row that has failed.
-           }
+ 
 
-
-
-
-
-        Toast::info(__('Alarmas importadas a la DB!.'));
+        Toast::info(__('Repostajes importados a la DB!.'));
     }
     
 }

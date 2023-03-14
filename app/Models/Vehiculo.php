@@ -4,14 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Vehiculo extends Model
+class Vehiculo extends Model implements Auditable
 {
     use HasFactory;
     use AsSource, Filterable;
-
+    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
+  
     
     protected $table ='vehiculos';
 
@@ -24,6 +28,7 @@ class Vehiculo extends Model
         'tecnologia_id',
         'detalletecnologia_id',
         'kilometraje_inicial',
+
         'fecha_matriculacion', 
         'observacion',
         'fecha_baja',
@@ -31,6 +36,7 @@ class Vehiculo extends Model
         
     ];
     protected $allowedSorts = [
+        'id',
         'matricula',
         'tipovehiculo_id',
         'marcavehiculo_id',
@@ -39,6 +45,8 @@ class Vehiculo extends Model
         'tecnologia_id',
         'detalletecnologia_id',
         'kilometraje_inicial',
+        
+
         'fecha_matriculacion', 
         'observacion',
         'fecha_baja',

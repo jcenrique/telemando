@@ -54,28 +54,35 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.suministros'),
 
             Menu::make('Ubicaciones y alarmas')
-           
+
                 ->permission('ubicaciones')
                 ->icon('fa.map-location-dot')
                 ->route('platform.ubicaciones'),
 
+            Menu::make('Inventario')
+
+                ->permission('inventarios')
+                ->icon('fa.boxes-stacked')
+                ->route('platform.inventarios'),
+
             Menu::make('Flota')
                 ->slug('sub-menu')
                 ->divider()
-                ->style('background-color:#502020;')
+                ->permission(['vehiculos', 'kilometros', 'repostaje'])
+
                 ->icon('car-on')
                 ->list([
-                    Menu::make('Vehículos')->icon('car')->route('platform.vehiculos'),
-                    Menu::make('Tipos vehículos')->icon('truck-monster')->route('platform.vehiculos.tipos'),
-                    Menu::make('Marcas')->icon('copyright')->route('platform.vehiculos.marcas'),
-                    Menu::make('Modelos')->icon('circle-info')->route('platform.vehiculos.modelos'),
-                    Menu::make('Tecnologias')->icon('bolt')->route('platform.vehiculos.tecnologias'),
-                    Menu::make('Detalle tecnologias')->icon('charging-station')->route('platform.vehiculos.detalles-tecnologias'),
-                    Menu::make('Registro Kilómetros')->icon('road')->route('platform.vehiculos.kilometros'),
-                    Menu::make('Repostajes')->icon('gas-pump')->route('platform.vehiculos.repostajes'),
+                    Menu::make('Vehículos')->icon('car')->route('platform.vehiculos')->permission('vehiculos'),
+                    Menu::make('Tipos vehículos')->icon('truck-monster')->route('platform.vehiculos.tipos')->permission('vehiculos'),
+                    Menu::make('Marcas')->icon('copyright')->route('platform.vehiculos.marcas')->permission('vehiculos'),
+                    Menu::make('Modelos')->icon('circle-info')->route('platform.vehiculos.modelos')->permission('vehiculos'),
+                    Menu::make('Tecnologias')->icon('bolt')->route('platform.vehiculos.tecnologias')->permission('vehiculos'),
+                    Menu::make('Detalle tecnologias')->icon('charging-station')->route('platform.vehiculos.detalles-tecnologias')->permission('vehiculos'),
+                    Menu::make('Registro Kilómetros')->icon('road')->route('platform.vehiculos.kilometros')->permission('kilometros'),
+                    Menu::make('Repostajes')->icon('gas-pump')->route('platform.vehiculos.repostajes')->permission('repostaje'),
 
                 ]),
-            
+
 
 
 

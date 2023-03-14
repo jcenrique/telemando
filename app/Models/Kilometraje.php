@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
@@ -11,7 +12,7 @@ class Kilometraje extends Model
 {
     use HasFactory;
     use AsSource, Filterable;
-
+  
     
     protected $table ='kilometrajes';
 
@@ -31,7 +32,7 @@ class Kilometraje extends Model
         'updated_at'
     ];
 
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculo::class);
     }

@@ -162,8 +162,20 @@
     "The application code is published under the MIT license." : "El código de la aplicación se publica bajo la licencia MIT.",
     "Showing" :"Mostrando",
     "of" :"de",
+    "results" :"resultados",
+    "All" : "Todo",
     "Columns" :"Columnas",
+    "All Columns":"Todas las columnas",
+    "Bulk Actions":"Acciones",
     "There are no objects currently displayed":"No hay objetos actualmente mostrados",
+    "Import or create objects, or check back later for updates":"Importe o cree objetos, o vuelva más tarde para ver si hay actualizaciones",
+    "Deleted entries" : "Registros eliminados",
+    "Show deleted entries" : "Mostrar eliminados",
+    "Ensure your account is using a long, random password to stay secure." : "Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantenerse seguro.",
+    "Allow the user to perform some actions that are not provided for by his roles":"Permitir que el usuario realice algunas acciones que no están previstas en sus roles",
+   "Lenguaje" : "Lenguaje euskera"
     
+
     
-}
+            
+    }

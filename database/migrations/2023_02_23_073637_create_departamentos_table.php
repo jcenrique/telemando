@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('departamentos', function (Blueprint $table) {
             $table->id();
             $table->string('departamento')->unique();
-            $table->foreignId('user_id')->constrained()->on('users');
+        
             $table->timestamps();
         });
     }

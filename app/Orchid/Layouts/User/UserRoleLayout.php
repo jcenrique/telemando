@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use App\Models\Departamento;
 use Orchid\Platform\Models\Role;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Select;
@@ -24,6 +25,8 @@ class UserRoleLayout extends Rows
                 ->multiple()
                 ->title(__('Name role'))
                 ->help('Specify which groups this account should belong to'),
+            
+            
         ];
     }
 }

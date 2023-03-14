@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-
+use App\Orchid\Screens\Inventarios\InventarioEditScreen;
+use App\Orchid\Screens\Inventarios\InventarioListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -353,4 +354,30 @@ Route::screen('vehiculos/repostajes', RespostajesVehiculosScreen::class)
     ->breadcrumbs(fn (Trail $trail) => $trail
 
         ->parent('platform.vehiculos')
-        ->push(__('Kilometros Vehiculos'), route('platform.vehiculos.repostajes')));
+        ->push(__('Repostaje Vehículos'), route('platform.vehiculos.repostajes')));
+
+
+        
+//Inventarios
+
+
+Route::screen('inventarios/create',InventarioEditScreen::class)->name('platform.inventarios.create')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->parent('platform.inventarios')
+            ->push(__('Añadir un Inventario'), route('platform.inventarios'));
+    });
+
+Route::screen('inveratios/{inventario?}/edit', InventarioEditScreen::class)
+->name('platform.inventarios.edit')
+->breadcrumbs(fn (Trail $trail, $inventario) => $trail
+    ->parent('platform.inventarios')
+    ->push(__('Editar Inventario'), route('platform.inventarios')));
+
+Route::screen('inventarios', InventarioListScreen::class)
+->name('platform.inventarios')
+->breadcrumbs(fn (Trail $trail) => $trail
+
+    ->parent('platform.index')
+    ->push(__('Inventarios'), route('platform.index')));
+

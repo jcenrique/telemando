@@ -13,10 +13,11 @@
 @endpush
 
 <div class="h2 fw-light d-flex align-items-center">
-   <x-orchid-icon path="bell" width="1.2em" height="1.2em"/>
+   <x-orchid-icon path="train-subway" width="1.2em" height="1.2em"/>
 
     <p class="ms-3 my-0 d-none d-sm-block">
-        SOFTREN
-        <small class="align-top opacity">Alarmas</small>
+        ETS-RFV
+        <br>
+        <small class="align-top opacity">{{__('Circulación y Estaciones')}}</small>
     </p>
 </div>

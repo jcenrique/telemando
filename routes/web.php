@@ -4,6 +4,8 @@ use App\Http\Controllers\AlarmaController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SuministrosController;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +19,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('home');
 })->name('inicio');
 
-
-
+Route::get('lang}', function($lang = null){
+   $lang = Auth::user()->lang;
+    App::setLocale($lang); 
+    session()->put('lang', $lang);
+    return redirect()->back();
+})->name('lang.swap');
+//Route::get('lang/{lang?}', [InicioController::class,'swap'])->name('lang.swap');
 Route::get(
     'search',
     [SearchController::class,'index']
@@ -30,7 +38,9 @@ Route::get(
 
 Route::get('suministros/export/', [SuministrosController::class, 'export'])->name('suministros.export');
 
-Route::get('suministros/import/', [SuministrosController::class, 'import'])->name('suministros.import');
+Route::get('suministros/exportvehiculo', [SuministrosController::class, 'exportVehiculo'])->name('suministros.exportVehiculo');
+
+
 
 
 Route::get('suministros', [InicioController::class, 'suministros'])->name('suministros');

@@ -3,7 +3,9 @@
 namespace App\Orchid\Layouts\Vehiculos;
 
 use App\Models\Departamento;
+use App\Models\User;
 use App\Models\Vehiculo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -50,10 +52,13 @@ class KilometrosVehiculoListener extends Listener
     protected function layouts(): iterable
     {
         //dd(Auth::user()->getRoles());
-        $roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota', 'admin'])->count();
+        $roles_permitidos = Auth::user()->getRoles()->whereIn('slug', ['flota','admin'])->count();
         $user_id =  Auth::user()->id;
+        $user = User::with('departamentos')->where('id',$user_id)->first();
+        $departamentos_id = $user->departamentos()->get()->pluck('id')->toArray();
+
         if($roles_permitidos == 0){
-            $array_departamentos = Departamento::where('user_id', $user_id)->get()->pluck('id')->toArray();
+            $array_departamentos =  $departamentos_id;
             if(sizeof( $array_departamentos) > 0) $roles_permitidos =1;
         }else{
             $array_departamentos = Departamento::all()->pluck('id')->toArray();

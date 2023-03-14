@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\User;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
+use App\Orchid\Layouts\User\UserDepartamentoLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\UserSwitch;
-use Orchid\Platform\Models\User;
+//use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -37,7 +40,8 @@ class UserEditScreen extends Screen
      */
     public function query(User $user): iterable
     {
-        $user->load(['roles']);
+      
+        $user->load(['roles', 'departamentos']);
 
         return [
             'user'       => $user,
@@ -141,6 +145,17 @@ class UserEditScreen extends Screen
                         ->method('save')
                 ),
 
+                Layout::block(UserDepartamentoLayout::class)
+                ->title(__('Departamentos'))
+                ->description(__('Actualiza o modifica la información de los departamentos a los que pertenece el usuario'))
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::DEFAULT())
+                        ->icon('check')
+                        ->canSee($this->user->exists)
+                        ->method('save')
+                ),
+
             Layout::block(RolePermissionLayout::class)
                 ->title(__('Permissions'))
                 ->description(__('Allow the user to perform some actions that are not provided for by his roles'))
@@ -163,6 +178,7 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
+            
         $request->validate([
             'user.email' => [
                 'required',
@@ -185,6 +201,13 @@ class UserEditScreen extends Screen
             ->save();
 
         $user->replaceRoles($request->input('user.roles'));
+
+        
+        $user->departamentos()->detach();
+
+        $user->departamentos()->attach($request->input('user.departamentos'));
+
+      
 
         Toast::info(__('User was saved.'));
 

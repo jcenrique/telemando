@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('kilometrajes', function (Blueprint $table) {
             $table->id();
-            $table->double('kilometraje');
+            $table->integer('kilometraje');
             $table->date('fecha');
             $table->foreignId('vehiculo_id')->constrained()->on('vehiculos')->cascadeOnDelete();
             $table->timestamps();

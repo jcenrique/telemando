@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{  app()->getLocale() }}" data-controller="html-load" dir="{{ \Orchid\Support\Locale::currentDir() }}">
+<html lang="{{   is_null(Illuminate\Support\Facades\Auth::user())?app()->getLocale(): Illuminate\Support\Facades\Auth::user()->lang }}" data-controller="html-load" dir="{{ \Orchid\Support\Locale::currentDir() }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,9 +13,13 @@
     </title>
     <meta name="csrf_token" content="{{  csrf_token() }}" id="csrf_token">
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
+
+    
     @if(\Orchid\Support\Locale::currentDir(app()->getLocale()) == "rtl")
+        
         <link rel="stylesheet" type="text/css" href="{{  mix('/css/orchid.rtl.css','vendor/orchid') }}">
     @else
+  
         <link rel="stylesheet" type="text/css" href="{{  mix('/css/orchid.css','vendor/orchid') }}">
     @endif
 
@@ -40,7 +45,8 @@
     @foreach(Dashboard::getResource('scripts') as $scripts)
         <script src="{{  $scripts }}" defer type="text/javascript"></script>
     @endforeach
-  
+    
+
 </head>
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
@@ -66,6 +72,6 @@
 
 @stack('scripts')
 
-
+@vite('resources/js/app.js')
 </body>
 </html>

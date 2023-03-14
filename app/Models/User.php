@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use Illuminate\Notifications\Notifiable;
 use Orchid\Platform\Models\User as Authenticatable;
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
@@ -10,6 +12,7 @@ class User extends Authenticatable implements  LdapAuthenticatable
 {
 
     use AuthenticatesWithLdap;
+    use Notifiable;
     /**
      * The attributes that are mass assignable.
      *
@@ -17,6 +20,7 @@ class User extends Authenticatable implements  LdapAuthenticatable
      */
     protected $fillable = [
         'name',
+        'lang',
         'email',
         'password',
         'permissions',
@@ -52,6 +56,7 @@ class User extends Authenticatable implements  LdapAuthenticatable
         'id',
         'name',
         'email',
+        'lang',
         'permissions',
     ];
 
@@ -63,6 +68,7 @@ class User extends Authenticatable implements  LdapAuthenticatable
     protected $allowedSorts = [
         'id',
         'name',
+        'lang',
         'email',
         'updated_at',
         'created_at',
@@ -71,6 +77,6 @@ class User extends Authenticatable implements  LdapAuthenticatable
     public function departamentos()
 
     {
-            return $this->hasMany(Departamento::class);
+            return $this->belongsToMany(Departamento::class);
     }
 }

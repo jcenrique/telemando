@@ -2,10 +2,14 @@
 
 namespace App\Orchid\Filters;
 
+use App\Models\Vehiculo;
 use Illuminate\Database\Eloquent\Builder;
 use Orchid\Filters\Filter;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
+
+use function PHPUnit\Framework\isNull;
 
 class MatriculaFilter extends Filter
 {
@@ -26,7 +30,7 @@ class MatriculaFilter extends Filter
      */
     public function parameters(): ?array
     {
-        return ['matricula'];
+        return ['id'];
     }
 
     /**
@@ -38,7 +42,7 @@ class MatriculaFilter extends Filter
      */
     public function run(Builder $builder): Builder
     {
-        return $builder->where('matricula', 'like', '%' . $this->request->get('matricula') . '%');
+        return $builder->where('id', $this->request->get('id') );
     }
 
     /**
@@ -49,12 +53,24 @@ class MatriculaFilter extends Filter
     public function display(): iterable
     {
         return [
-            Input::make('matricula')
-                ->type('text')
-               
-                //->value($this->request->get('matricula'))
-                ->placeholder(__('Buscar...'))
-                ->title('Matrícula')
+            Select::make('id')
+            ->empty()
+        
+           ->fromModel(Vehiculo::class,'matricula','id')
+       
+            ->title('Matrícula')
+    
         ];
+    }
+
+    public function value(): string
+    {
+     
+        if(is_null( Vehiculo::find( $this->request->get('id')))){
+            return $this->name().': '. __('No existe');
+        }else{
+            return $this->name().': '. Vehiculo::find( $this->request->get('id'))->matricula;
+        }
+       
     }
 }

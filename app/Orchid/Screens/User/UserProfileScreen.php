@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
@@ -73,20 +74,25 @@ class UserProfileScreen extends Screen
                 ->title(__('Profile Information'))
                 ->description(__("Update your account's profile information and email address."))
                 ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::DEFAULT())
-                        ->icon('check')
-                        ->method('save')
+                    [
+                        Button::make(__('Save'))
+                            ->type(Color::DEFAULT())
+                            ->icon('check')
+                            ->method('save'),
+                      
+                    ]
                 ),
 
             Layout::block(ProfilePasswordLayout::class)
-                ->title(__('Update Password'))
+                ->title(__('Update password'))
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(
-                    Button::make(__('Update password'))
-                        ->type(Color::DEFAULT())
-                        ->icon('check')
-                        ->method('changePassword')
+                    [
+                        Button::make(__('Update password'))
+                            ->type(Color::DEFAULT())
+                            ->icon('check')
+                            ->method('changePassword'),
+                    ]
                 ),
         ];
     }
@@ -94,10 +100,13 @@ class UserProfileScreen extends Screen
     /**
      * @param Request $request
      */
-    public function save(Request $request): void
+    public function save(Request $request)
     {
+        
+
         $request->validate([
             'user.name'  => 'required|string',
+            'user.lang'  => 'required|string',
             'user.email' => [
                 'required',
                 Rule::unique(User::class, 'email')->ignore($request->user()),
@@ -107,8 +116,11 @@ class UserProfileScreen extends Screen
         $request->user()
             ->fill($request->get('user'))
             ->save();
-
+       
         Toast::info(__('Profile updated.'));
+
+        return   redirect()->route('lang.swap');
+      
     }
 
     /**
@@ -118,7 +130,7 @@ class UserProfileScreen extends Screen
     {
         $guard = config('platform.guard', 'web');
         $request->validate([
-            'old_password' => 'required|current_password:'.$guard,
+            'old_password' => 'required|current_password:' . $guard,
             'password'     => 'required|confirmed',
         ]);
 

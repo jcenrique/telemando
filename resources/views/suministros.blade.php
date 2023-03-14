@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" data-controller="html-load" dir="{{ \Orchid\Support\Locale::currentDir() }}">
+<html lang="{{  is_null(Illuminate\Support\Facades\Auth::user())?app()->getLocale(): Illuminate\Support\Facades\Auth::user()->lang}}" data-controller="html-load" dir="{{ \Orchid\Support\Locale::currentDir() }}">
 
 <head>
     <meta charset="utf-8">

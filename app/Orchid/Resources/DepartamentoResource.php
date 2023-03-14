@@ -39,11 +39,7 @@ class DepartamentoResource extends Resource
             
             ->help(__('Introduzca el nombre del departamento')),
 
-            Relation::make('user_id')
-            ->title(__('Usuario'))
-            ->required()
-                ->fromModel(User::class, 'name')
-                ->help(__('Elija un usuario responsable del departamento')),
+          
         ];
     }
 
@@ -57,10 +53,7 @@ class DepartamentoResource extends Resource
         return [
           //  TD::make('id'),
             TD::make('departamento',__('Departamento'))->sort(),
-            TD::make('user_id', __('Usuario'))
-                ->render(function ($model) {
-                    return User::find($model->user->id)->name;
-                }),
+          
             TD::make('created_at', __('Date of creation'))
                 ->render(function ($model) {
                     return $model->created_at->toDateTimeString();
@@ -82,10 +75,7 @@ class DepartamentoResource extends Resource
     {
         return [
             Sight::make('departamento',__('Departamento')),
-            Sight::make('user_id',__('Usuario')) 
-            ->render(function ($model) {
-                return User::find($model->user->id)->name;
-            }),
+         
              
 
         ];

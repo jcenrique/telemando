@@ -15,11 +15,18 @@ return new class extends Migration
     {
         Schema::create('repostajes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vehiculo_id')->constrained()->on('vehiculos')->cascadeOnDelete();
+            $table->date('fecha');
+            $table->string('poblacion')->nullable();
+            $table->string('establecimiento')->nullable();
+            $table->integer('kilometraje');
+            $table->string('combustible');
             $table->double('litros');
             $table->double('importe');
-            $table->string('combustible');
-            $table->date('fecha');
-            $table->foreignId('vehiculo_id')->constrained()->on('vehiculos')->cascadeOnDelete();
+            $table->date('fecha_importacion');
+            $table->unique(['vehiculo_id','fecha']);
+           
+          
             $table->timestamps();
         });
     }

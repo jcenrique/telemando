@@ -36,3 +36,4 @@ class CreateOrchidRoleUsersTable extends Migration
         Schema::dropIfExists('role_users');
     }
 }
+// 

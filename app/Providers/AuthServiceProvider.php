@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\App;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -43,7 +44,7 @@ class AuthServiceProvider extends ServiceProvider
                     'password' => $request->password,
                 ],
             ]);
-
+          
             return $validated ? Auth::getLastAttempted() : null;
         });
 

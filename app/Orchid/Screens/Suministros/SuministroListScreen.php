@@ -5,10 +5,12 @@ namespace App\Orchid\Screens\Suministros;
 use App\Exports\SuministrosExport;
 use App\Imports\SuministroImport;
 use App\Models\Suministro;
+use App\Orchid\Filters\WithTrashed;
 use App\Orchid\Filters\ZonaQueryFilter;
 use App\Orchid\Layouts\Suministros\PoblacionFiltersLayout;
 use App\Orchid\Layouts\Suministros\SuministroTableLayout;
 use App\Orchid\Layouts\Telemando\UbicacionFiltersLayout;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
@@ -30,7 +32,7 @@ class SuministroListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'suministros' =>  Suministro::filters([ZonaQueryFilter::class])->paginate(),
+            'suministros' =>  Suministro::filters([ZonaQueryFilter::class, WithTrashed::class])->paginate(),
         ];
     }
 
@@ -59,19 +61,21 @@ class SuministroListScreen extends Screen
         return [
 
             Link::make(__('Crear nuevo'))
-            ->icon('pencil')
-            ->route('platform.suministro.create'),
+                ->icon('pencil')
+                ->route('platform.suministro.create'),
 
             ModalToggle::make(__('Importar'))
                 ->modal('abrirFicheroExcel')
                 ->method('importar')
-                          
+
                 ->icon('upload'),
-            
-                Link::make(__('Exportar'))
-            ->icon('download')
-            ->route('suministros.export')
-            ,
+
+           
+                Button::make(__('Exportar'))
+                ->icon('download')
+                ->method('export')
+                ->parameters(request()->all())
+                ->rawClick(),
 
         ];
     }
@@ -85,13 +89,13 @@ class SuministroListScreen extends Screen
     {
         return [
 
-           
-            
+
+            Layout::selection([ WithTrashed::class]),
             SuministroTableLayout::class,
             Layout::modal('abrirFicheroExcel', [
                 Layout::rows([
 
-                 
+
 
                     Input::make('archivo')->type('file')
                         ->title(__('Selecciona un archivo Excel de suministros electricos'))
@@ -117,24 +121,24 @@ class SuministroListScreen extends Screen
             $filePath = '/public/' . $request->archivo->storeAs('uploads', $fileName, 'public');
         }
         //borrar todos los emenetos y alarmas en cascada de la ubicacion elegida y equipo elegido
-     
+
 
         //leer las hojas y crear lon nuevos elementos en la DB 
 
 
 
-            $importHoja = new SuministroImport();
+        $importHoja = new SuministroImport();
 
-           
-            Excel::import($importHoja, $filePath);
-        
 
-            foreach ($importHoja->failures() as $failure) {
-                $failure->row(); // row that went wrong
-                $failure->attribute(); // either heading key (if using heading row concern) or column index
-                $failure->errors(); // Actual error messages from Laravel validator
-                $failure->values(); // The values of the row that has failed.
-           }
+        Excel::import($importHoja, $filePath);
+
+
+        foreach ($importHoja->failures() as $failure) {
+            $failure->row(); // row that went wrong
+            $failure->attribute(); // either heading key (if using heading row concern) or column index
+            $failure->errors(); // Actual error messages from Laravel validator
+            $failure->values(); // The values of the row that has failed.
+        }
 
 
 
@@ -142,6 +146,16 @@ class SuministroListScreen extends Screen
 
         Toast::info(__('Suministros importados a la DB!.'));
     }
+
+    public function export() 
+    {
     
-  
+        $elementos_exportación = Suministro::filters()->withTrashed()->get();
+    $date= Suministro::get('updated_at')->sortByDesc('updated_at')->first()->updated_at;
+    $newDate = Carbon::createFromFormat('Y-m-d H:i:s', $date)
+                                    ->format('Ymd H,i');
+
+        return Excel::download(new SuministrosExport($elementos_exportación), $newDate . '_suministros.xlsx');
+    }
+
 }

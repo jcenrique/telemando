@@ -14,10 +14,13 @@ use App\Orchid\Filters\MatriculaFilter;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Label;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Facades\Toast;
 
 class VehiculoLayautTable extends Table
 {
@@ -31,6 +34,7 @@ class VehiculoLayautTable extends Table
      */
     protected $target = 'vehiculos';
 
+    public $datos;
     /**
      * Get the table cells to be displayed.
      *
@@ -38,20 +42,32 @@ class VehiculoLayautTable extends Table
      */
     protected function columns(): iterable
     {
+        $this->datos = $this->query['vehiculos'];
 
-        
         return [
 
             //por si hace falta realizar acciones masivas
-        //     TD::make()
-        //     ->render(function (Vehiculo $vehiculo){
-        //         return CheckBox::make('vehiculos[]')
-        //             ->value($vehiculo->id)
-        //             //->placeholder($vehiculo->matricula)
-        //             ->checked(false);
-        // }),
-            TD::make('matricula', __('Matrícula'))->sort(),
-            
+            //     TD::make()
+            //     ->render(function (Vehiculo $vehiculo){
+            //         return CheckBox::make('vehiculos[]')
+            //             ->value($vehiculo->id)
+            //             //->placeholder($vehiculo->matricula)
+            //             ->checked(false);
+            // }),
+            TD::make('matricula', __('Matrícula'))->sort()
+
+                ->render(function ($model) {
+                    if ($model->fecha_baja == null) {
+                        return Link::make($model->matricula)
+                            ->route('platform.vehiculo.edit', [$model->id]);
+                    } else {
+                        return Link::make($model->matricula)
+
+                            ->route('platform.vehiculo.edit', [$model->id])
+                            ->style('color:red;');
+                    }
+                }),
+
             TD::make('tipovehiculo_id', __('Tipo de Vehículo'))->sort()
                 ->filter(TD::FILTER_SELECT, Tipovehiculo::all('id', 'tipo')->pluck('tipo', 'id',)->toArray())
                 ->render(function ($model) {
@@ -67,13 +83,13 @@ class VehiculoLayautTable extends Table
                 }),
 
 
-            TD::make('departamento_id', __('Departamento/Responsable'))->sort()
+            TD::make('departamento_id', __('Departamento'))->sort()
                 ->filter(TD::FILTER_SELECT, Departamento::all('id', 'departamento')->pluck('departamento', 'id',)->toArray())
                 ->render(function ($model) {
                     $departamento = Departamento::find($model->departamento_id)->departamento;
-                    $user = User::find(Departamento::find($model->departamento_id)->user_id)->name;
 
-                    return view('vendor.platform.layouts.fila-doble', ['var1' => $departamento, 'var2' => $user]);
+
+                    return    $departamento;
                 }),
 
             TD::make('tecnologia_id', __('Tecnología'))->sort()
@@ -86,7 +102,7 @@ class VehiculoLayautTable extends Table
                 }),
 
             TD::make('regimen', __('Régimen'))->sort()->filter(TD::FILTER_SELECT, ['PROPIEDAD' => 'PROPIEDAD', 'RENTING' => 'RENTING']),
-            
+
             TD::make('fecha_matriculacion', __('Fecha matriculación'))->sort()
                 ->filter(TD::FILTER_DATE_RANGE)
 
@@ -104,7 +120,7 @@ class VehiculoLayautTable extends Table
                     return $model->kilometrajes->max('kilometraje') . ' km.';
                 }),
 
-                //no funciona
+            //no funciona
             // TD::make('fecha_baja', __('Fecha baja'))->sort()
             //     ->canSee(!is_null( $this->query['model']['fecha_baja']))
             //     ->filter(TD::FILTER_DATE_RANGE)
@@ -114,7 +130,7 @@ class VehiculoLayautTable extends Table
             //     }),
 
             TD::make('observacion', __('Observación')),
-                
+
 
             TD::make('created_at', __('Date of creation'))
                 ->defaultHidden(true)
@@ -146,18 +162,24 @@ class VehiculoLayautTable extends Table
                             ]),
                         Button::make(__('Baja'))
                             ->icon('car-burst')
-                            ->canSee($vehiculo->fecha_baja ==null)
+                            ->canSee($vehiculo->fecha_baja == null)
                             ->confirm(__('El vehiculo: <strong> ' . $vehiculo->matricula . '</strong> será dado de baja con fecha de hoy, pero no eliminado, ¿está usted seguro?'))
                             ->method('baja', [
                                 'id' => $vehiculo->id,
                             ]),
-                            Button::make(__('Alta'))
+                        Button::make(__('Alta'))
                             ->icon('cash-register')
-                            ->canSee($vehiculo->fecha_baja !=null)
+                            ->canSee($vehiculo->fecha_baja != null)
                             ->confirm(__('El vehiculo: <strong> ' . $vehiculo->matricula . '</strong> será dado de alta, ¿está usted seguro?'))
                             ->method('alta', [
                                 'id' => $vehiculo->id,
                             ]),
+                        ModalToggle::make(__('Introducir kilómetros'))
+                        ->modal('registro_kilometros')
+                        ->method('anotarKilometros' ,['id' => $vehiculo->id])
+                        
+                        ->icon('gauge'),
+
                     ])),
         ];
     }
@@ -165,4 +187,5 @@ class VehiculoLayautTable extends Table
     {
         return true;
     }
+ 
 }

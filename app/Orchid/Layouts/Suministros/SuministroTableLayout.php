@@ -67,6 +67,14 @@ class SuministroTableLayout extends Table
 
            // TD::make('id'),
            TD::make('position', __('Posición'))->sort(),
+           TD::make('CUP', 'CUP')->sort()
+            
+                ->render(fn (Suministro $suministro) => 
+                        Link::make($suministro->CUP)
+                           
+                                
+                        ->style('color:red;background-color:rgb(255, 0, 0, .1);border-radius:8px; font-weight:bold;')
+                ->route('platform.suministro.edit', $suministro->id)),
             TD::make('zona_id',__('Zona'))->sort()->filter(TD::FILTER_SELECT, Zona::all('id', 'zona')->pluck( 'zona','id',)->toArray())
             ->render(function ($model) {
                 return Zona::find($model->zona_id)->zona;
@@ -81,17 +89,16 @@ class SuministroTableLayout extends Table
                     return Tipo::find($model->tipo_id)->tipo;
                 }
             }),
-            TD::make('CUP', 'CUP')->sort()
             
-                ->render(fn (Suministro $suministro) => 
-                        Link::make($suministro->CUP)
-                           
-                                
-                        ->style('color:red;background-color:rgb(255, 0, 0, .1);border-radius:8px; font-weight:bold;')
-                ->route('platform.suministro.edit', $suministro->id)),
 
             TD::make('contrato',__('Contrato')),
             TD::make('num_contador',__('Num contador')),
+            TD::make('telegestion',__('Telegestión'))->Filter(TD::FILTER_SELECT,['NO' ,'SÍ'])
+            ->render(function ($model) {
+             
+                return $model->telegestion ==0 ? 'NO':'SÍ';
+                
+            }),
             TD::make('tarifa_id',__('Tarifa'))->sort()->filter(TD::FILTER_SELECT, Tarifa::all('id', 'tarifa')->pluck( 'tarifa','id',)->toArray())
             ->render(function ($model) {
                 return Tarifa::find($model->tarifa_id)->tarifa;
@@ -114,6 +121,7 @@ class SuministroTableLayout extends Table
                 }
             }),
             TD::make('icp',__('ICP'))->sort()->filter(TD::FILTER_SELECT,$array_icp),
+            TD::make('comercializadora',__('Comercializadora'))->sort()->filter(TD::FILTER_SELECT,['CLIENTES','CUR']),
             TD::make('contador',__('Contador'))->sort()->filter(TD::FILTER_SELECT,$array_contador),
             TD::make('observacion',__('Observación')),
 

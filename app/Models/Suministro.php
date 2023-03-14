@@ -4,16 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 use Rutorika\Sortable\SortableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Suministro extends Model
+class Suministro extends Model implements Auditable
 {
     use HasFactory;
     use AsSource, Filterable, Attachable;
     use SortableTrait;
+    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
 
     protected $fillable = [
@@ -38,6 +42,8 @@ class Suministro extends Model
         'relacion_id',
         'icp',
         'contador',
+        'telegestion',
+        'comercializadora',
         'observacion',
 
 
@@ -65,8 +71,11 @@ class Suministro extends Model
         'relacion_id',
         'icp',
         'contador',
+        'telegestion',
+        'comercializadora',
         'observacion',
     ];
+    
     
 
     protected $allowedFilters = [
@@ -86,6 +95,8 @@ class Suministro extends Model
         'relacion_id',
         'icp',
         'contador',
+        'telegestion',
+        'comercializadora',
         'observacion',
       
     ];
